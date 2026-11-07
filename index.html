@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>ISAAC AI MUSIC STUDIO</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#151d31;--line:#2a3652;--text:#f5f7ff;--muted:#aab5cc;--accent:#8b5cf6;--accent2:#22c55e}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;background:radial-gradient(circle at top right,#28205b 0,#0b1020 42%);color:var(--text)}
+header{padding:26px 18px;text-align:center}header .logo{font-size:13px;letter-spacing:3px;color:#c4b5fd;font-weight:800}
+h1{font-size:clamp(28px,6vw,44px);margin:12px 0 8px}header p{color:var(--muted);margin:0}
+main{width:min(920px,92%);margin:10px auto 50px}.card{background:#151d31eF;border:1px solid var(--line);border-radius:20px;padding:22px;margin:16px 0;box-shadow:0 15px 40px #0003}
+h2{font-size:20px;margin:0 0 16px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+label{display:block;color:#dbe3f5;font-size:14px;margin:0 0 7px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px;background:#0c1427;color:var(--text);font:inherit}
+textarea{min-height:100px;resize:vertical}.wide{grid-column:1/-1}
+button{border:0;border-radius:12px;padding:13px 18px;font-weight:800;font-size:15px;cursor:pointer;color:white;background:linear-gradient(90deg,var(--accent),#6366f1)}
+button.secondary{background:#26334e;border:1px solid #3a4968}button:disabled{opacity:.55;cursor:not-allowed}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}.note{font-size:13px;line-height:1.5;color:var(--muted)}
+.badge{display:inline-block;padding:5px 10px;border-radius:99px;background:#183b35;color:#86efac;font-size:12px;font-weight:700}
+#status{margin-top:14px;padding:12px;border-radius:10px;background:#0c1427;color:#c4b5fd;display:none}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 20px 30px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">ISAAC PRESENTS</div>
+  <h1>🎵 ISAAC AI MUSIC STUDIO</h1>
+  <p>Create your song and music-video idea in one place.</p>
+</header>
+<main>
+  <section class="card">
+    <span class="badge">MVP • FREE-FIRST BUILD</span>
+    <h2 style="margin-top:14px">Create your project</h2>
+    <div class="grid">
+      <div class="wide">
+        <label for="idea">Describe the song you want</label>
+        <textarea id="idea" placeholder="Example: A hopeful Kinyarwanda love song about staying together..."></textarea>
+      </div>
+      <div><label for="language">Language</label>
+        <select id="language"><option>Kinyarwanda</option><option>English</option><option>French</option><option>Swahili</option><option>Other</option></select></div>
+      <div><label for="genre">Music style</label>
+        <select id="genre"><option>Afrobeat</option><option>Gospel</option><option>Amapiano</option><option>Hip-hop</option><option>R&B</option><option>Acoustic</option></select></div>
+      <div><label for="voice">Voice</label>
+        <select id="voice"><option>Male</option><option>Female</option><option>Duet</option></select></div>
+      <div><label for="duration">Target duration</label>
+        <select id="duration"><option value="90">1 minute 30 seconds (90 sec)</option></select></div>
+      <div><label for="video">Video format</label>
+        <select id="video"><option>Vertical (TikTok / Reels)</option><option>Landscape (YouTube)</option><option>Square</option></select></div>
+      <div><label for="email">Email (account setup comes next)</label>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email"></div>
+    </div>
+    <div class="actions">
+      <button id="save">Save project brief</button>
+      <button class="secondary" id="download">Download brief (.txt)</button>
+    </div>
+    <div id="status" role="status"></div>
+  </section>
+  <section class="card">
+    <h2>What this first version does</h2>
+    <p class="note">This is the first website prototype. It saves your song idea in this browser and can download the project brief. AI song generation, video rendering, user accounts, and cloud storage are not connected yet. We will add them one by one using services with free tiers, and check their limits before relying on them.</p>
+    <p class="note"><strong>Free-use plan:</strong> start with 90-second songs/videos to reduce generation time and stay within free quotas. A free plan may still have daily limits, queues, watermarks, or change its terms.</p>
+  </section>
+</main>
+<footer>ISAAC AI MUSIC STUDIO • Version 0.1 • Built step by step</footer>
+<script>
+const fields=["idea","language","genre","voice","duration","video","email"];
+function brief(){const d={};fields.forEach(k=>d[k]=document.getElementById(k).value.trim());return d}
+function show(msg){const s=document.getElementById("status");s.textContent=msg;s.style.display="block"}
+document.getElementById("save").addEventListener("click",()=>{const d=brief();if(!d.idea){show("Please describe your song idea first.");return}localStorage.setItem("isaacMusicProject",JSON.stringify(d));show("Project brief saved in this browser. AI generation is not connected yet.");});
+document.getElementById("download").addEventListener("click",()=>{const d=brief();const content="ISAAC AI MUSIC STUDIO — PROJECT BRIEF\n\n"+Object.entries(d).map(([k,v])=>k.toUpperCase()+": "+v).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([content],{type:"text/plain"}));a.download="isaac-music-project.txt";a.click();URL.revokeObjectURL(a.href);show("Your project brief has been downloaded.");});
+</script>
+</body>
+</html>
